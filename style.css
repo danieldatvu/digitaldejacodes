@@ -1,0 +1,70 @@
+const express = require('express');
+const { body, validationResult } = require('express-validator');
+const nodemailer = require('nodemailer');
+
+const router = express.Router();
+
+// Validation rules
+const validateContact = [
+  body('name').trim().notEmpty().withMessage('Name is required').escape(),
+  body('email').isEmail().withMessage('A valid email is required').normalizeEmail(),
+  body('message').trim().isLength({ min: 10 }).withMessage('Message must be at least 10 characters').escape(),
+  body('company').trim().optional().escape(),
+  body('subject').trim().optional().escape(),
+];
+
+router.post('/', validateContact, async (req, res) => {
+  // Check validation
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { name, email, company, subject, message } = req.body;
+
+  // Configure transporter — set SMTP env vars to enable real email sending
+  // For local dev this logs to console if SMTP_HOST is not set
+  if (process.env.SMTP_HOST) {
+    try {
+      const transporter = nodemailer.createTransporter({
+        host: process.env.SMTP_HOST,
+        port: process.env.SMTP_PORT || 587,
+        secure: false,
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASS,
+        },
+      });
+
+      await transporter.sendMail({
+        from: `"${name}" <${email}>`,
+        to: process.env.CONTACT_EMAIL || 'daniel@example.com',
+        subject: subject || 'New contact form message',
+        text: `Name: ${name}\nEmail: ${email}\nCompany: ${company || 'N/A'}\nSubject: ${subject || 'N/A'}\n\n${message}`,
+        html: `
+          <p><strong>Name:</strong> ${name}</p>
+          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Company:</strong> ${company || 'N/A'}</p>
+          <p><strong>Subject:</strong> ${subject || 'N/A'}</p>
+          <hr/>
+          <p>${message.replace(/\n/g, '<br/>')}</p>
+        `,
+      });
+    } catch (err) {
+      console.error('Email send error:', err);
+      return res.status(500).json({ error: 'Failed to send message. Please try again.' });
+    }
+  } else {
+    // Dev mode — log to console
+    console.log('\n📩 New contact form submission:');
+    console.log(`  Name:    ${name}`);
+    console.log(`  Email:   ${email}`);
+    console.log(`  Company: ${company || 'N/A'}`);
+    console.log(`  Subject: ${subject || 'N/A'}`);
+    console.log(`  Message: ${message}\n`);
+  }
+
+  return res.status(200).json({ success: true, message: 'Message received. Thank you!' });
+});
+
+module.exports = router;

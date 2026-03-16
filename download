@@ -1,0 +1,46 @@
+# Daniel Vu — Personal Website
+
+Minimalist personal site built with Node.js + Express.
+
+## Stack
+- **Runtime**: Node.js 18+
+- **Framework**: Express 4
+- **Security**: Helmet (CSP, HSTS, etc.)
+- **Contact form**: Server-side validation via express-validator, email via Nodemailer
+- **Frontend**: Vanilla HTML/CSS/JS (no build step)
+
+## Project structure
+```
+├── server.js            # Express app entry point
+├── routes/
+│   └── contact.js       # POST /api/contact endpoint
+├── views/
+│   ├── index.html       # Main page
+│   └── 404.html         # 404 page
+├── public/
+│   ├── css/style.css    # Stylesheet
+│   └── js/main.js       # Client-side form logic
+├── .env.example         # Environment variable template
+└── package.json
+```
+
+## Getting started
+
+```bash
+npm install
+cp .env.example .env    # optional — fill in SMTP details to enable email
+npm start               # production
+npm run dev             # development with auto-reload (requires nodemon)
+```
+
+Site runs at **http://localhost:3000**
+
+## Contact form
+
+Without SMTP config, form submissions are logged to the console (useful for local dev).  
+To enable real email delivery, set `SMTP_HOST`, `SMTP_USER`, `SMTP_PASS`, and `CONTACT_EMAIL` in `.env`.
+
+## Deployment
+
+Works out of the box on **Railway**, **Render**, **Fly.io**, or any Node.js host.  
+Set `PORT` environment variable if needed (defaults to 3000).

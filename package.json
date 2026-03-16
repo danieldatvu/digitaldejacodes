@@ -1,0 +1,13 @@
+# Copy this file to .env and fill in your values
+# The site works without these — contact form submissions are logged to console in dev mode
+
+PORT=3000
+
+# SMTP settings (optional — enables real email sending)
+SMTP_HOST=smtp.example.com
+SMTP_PORT=587
+SMTP_USER=your@email.com
+SMTP_PASS=your-password
+
+# Where contact form emails get delivered
+CONTACT_EMAIL=daniel@example.com

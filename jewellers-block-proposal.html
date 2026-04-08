@@ -1,0 +1,1764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jewellers Block Insurance — Proposal Form</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --sand: #f5f0e8;
+    --ink: #1a1714;
+    --gold: #b8935a;
+    --gold-light: #d4b483;
+    --muted: #8a7f72;
+    --line: #ddd5c4;
+    --white: #fdfcfa;
+    --error: #c0392b;
+    --success: #2d6a4f;
+    --radius: 2px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--sand);
+    color: var(--ink);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--ink);
+    color: var(--sand);
+    padding: 2.5rem 4rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .header-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .header-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 300;
+  }
+
+  header h1 {
+    font-size: 1.9rem;
+    font-weight: 300;
+    letter-spacing: 0.03em;
+    line-height: 1.1;
+  }
+
+  header h1 span { color: var(--gold-light); font-weight: 500; }
+
+  .header-ref {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    text-align: right;
+    line-height: 1.8;
+  }
+
+  /* ── PROGRESS ── */
+  .progress-bar {
+    background: #2a2520;
+    height: 3px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  /* ── STEPS NAV ── */
+  .steps-nav {
+    background: var(--white);
+    border-bottom: 1px solid var(--line);
+    padding: 0 4rem;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    position: sticky;
+    top: 3px;
+    z-index: 99;
+  }
+
+  .step-tab {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 1rem 1.4rem;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    color: var(--muted);
+    white-space: nowrap;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .step-tab:hover { color: var(--ink); }
+  .step-tab.active { color: var(--ink); border-bottom-color: var(--gold); }
+  .step-tab.done { color: var(--success); }
+  .step-tab .step-num {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--line);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.55rem;
+    flex-shrink: 0;
+  }
+  .step-tab.active .step-num { background: var(--gold); color: var(--white); }
+  .step-tab.done .step-num { background: var(--success); color: var(--white); }
+
+  /* ── MAIN ── */
+  main { max-width: 860px; margin: 0 auto; padding: 3rem 2rem 6rem; }
+
+  .section { display: none; animation: fadeIn 0.3s ease; }
+  .section.active { display: block; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .section-header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.2rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+
+  .section-title {
+    font-size: 1.75rem;
+    font-weight: 300;
+    color: var(--ink);
+  }
+
+  .section-desc {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-top: 0.4rem;
+    font-weight: 300;
+  }
+
+  /* ── FIELD GROUPS ── */
+  .field-group {
+    margin-bottom: 2rem;
+  }
+
+  .field-group-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .field-row.full { grid-template-columns: 1fr; }
+  .field-row.trio { grid-template-columns: 1fr 1fr 1fr; }
+
+  /* ── FIELD ── */
+  .field { display: flex; flex-direction: column; gap: 0.35rem; }
+
+  label {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: 0.01em;
+  }
+
+  label .req { color: var(--gold); margin-left: 2px; }
+  label .hint {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 300;
+    color: var(--muted);
+    font-style: italic;
+    margin-top: 1px;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  input[type="email"],
+  input[type="tel"],
+  select,
+  textarea {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    font-weight: 300;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 0.7rem 0.9rem;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(184, 147, 90, 0.1);
+  }
+
+  input.error, select.error, textarea.error {
+    border-color: var(--error);
+  }
+
+  .field-error {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--error);
+    display: none;
+  }
+
+  textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
+
+  /* ── RADIO / CHECKBOX ── */
+  .radio-group, .check-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 0.2rem;
+  }
+
+  .radio-option, .check-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    padding: 0.55rem 1rem;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    transition: all 0.15s;
+    user-select: none;
+  }
+
+  .radio-option:hover, .check-option:hover {
+    border-color: var(--gold-light);
+    background: #fdf8f1;
+  }
+
+  .radio-option input, .check-option input { display: none; }
+
+  .radio-option.selected, .check-option.selected {
+    border-color: var(--gold);
+    background: #fdf5e8;
+    color: var(--ink);
+  }
+
+  /* ── CURRENCY INPUT ── */
+  .currency-wrap { position: relative; }
+  .currency-wrap .curr-symbol {
+    position: absolute;
+    left: 0.9rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    pointer-events: none;
+  }
+  .currency-wrap input { padding-left: 2.5rem; }
+
+  /* ── CONDITIONAL BLOCK ── */
+  .conditional {
+    background: #fdf8f1;
+    border-left: 2px solid var(--gold-light);
+    padding: 1.2rem 1.5rem;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    margin-top: 0.8rem;
+    display: none;
+  }
+  .conditional.show { display: block; animation: fadeIn 0.25s ease; }
+
+  /* ── CLAIMS TABLE ── */
+  .claims-table { width: 100%; border-collapse: collapse; margin-top: 0.8rem; }
+  .claims-table th {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: left;
+    padding: 0.5rem 0.7rem;
+    border-bottom: 1px solid var(--line);
+    background: var(--sand);
+  }
+  .claims-table td {
+    padding: 0.4rem 0.3rem;
+    vertical-align: middle;
+  }
+  .claims-table td input, .claims-table td select {
+    font-size: 0.72rem;
+    padding: 0.45rem 0.6rem;
+  }
+  .btn-add-row, .btn-remove-row {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    border: 1px solid var(--line);
+    background: transparent;
+    padding: 0.4rem 0.8rem;
+    border-radius: var(--radius);
+    color: var(--muted);
+    transition: all 0.15s;
+  }
+  .btn-add-row:hover { border-color: var(--gold); color: var(--gold); }
+  .btn-remove-row { color: var(--error); border-color: var(--line); padding: 0.3rem 0.6rem; }
+  .btn-remove-row:hover { border-color: var(--error); }
+
+  /* ── NAVIGATION ── */
+  .nav-btns {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.8rem 2rem;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+  }
+
+  .btn-prev {
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--muted);
+  }
+  .btn-prev:hover { border-color: var(--ink); color: var(--ink); }
+
+  .btn-next {
+    background: var(--ink);
+    color: var(--sand);
+  }
+  .btn-next:hover { background: #2e2a26; }
+
+  .btn-submit {
+    background: var(--gold);
+    color: var(--white);
+    padding: 0.9rem 2.5rem;
+  }
+  .btn-submit:hover { background: #a07a44; }
+
+  /* ── REVIEW PANEL ── */
+  .review-block {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+  }
+  .review-block-header {
+    background: var(--sand);
+    padding: 0.7rem 1.2rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 1px solid var(--line);
+  }
+  .review-item {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 1rem;
+    padding: 0.65rem 1.2rem;
+    border-bottom: 1px solid var(--line);
+    align-items: baseline;
+  }
+  .review-item:last-child { border-bottom: none; }
+  .review-key { font-size: 0.75rem; color: var(--muted); }
+  .review-val { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--ink); word-break: break-word; }
+
+  /* ── SUCCESS ── */
+  #success-screen {
+    display: none;
+    text-align: center;
+    padding: 5rem 2rem;
+  }
+  .success-icon {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: var(--success);
+    display: inline-flex; align-items: center; justify-content: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    color: white;
+  }
+  .success-ref {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    margin-top: 0.5rem;
+  }
+
+  /* ── EXPORT BTNS ── */
+  .export-row {
+    display: flex;
+    gap: 0.8rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+  }
+  .btn-export {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.55rem 1.2rem;
+    border-radius: var(--radius);
+    cursor: pointer;
+    border: 1px solid var(--gold);
+    background: transparent;
+    color: var(--gold);
+    transition: all 0.15s;
+  }
+  .btn-export:hover { background: var(--gold); color: white; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    header { padding: 1.5rem; flex-direction: column; align-items: flex-start; }
+    .steps-nav { padding: 0 1rem; }
+    main { padding: 1.5rem 1rem 5rem; }
+    .field-row { grid-template-columns: 1fr; }
+    .field-row.trio { grid-template-columns: 1fr; }
+    .review-item { grid-template-columns: 1fr; gap: 0.2rem; }
+  }
+
+  .info-callout {
+    background: #f8f5f0;
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--gold);
+    padding: 0.8rem 1rem;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .divider { height: 1px; background: var(--line); margin: 1.8rem 0; }
+
+  select option[value=""] { color: var(--muted); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-brand">
+    <div class="header-badge">Insurance Proposal Form</div>
+    <h1>Jewellers <span>Block</span><br>Insurance</h1>
+  </div>
+  <div class="header-ref">
+    <div id="form-date-display"></div>
+  </div>
+</header>
+
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<nav class="steps-nav" id="stepsNav"></nav>
+
+<main>
+  <!-- ═══ SECTION 1: Insured Details ═══ -->
+  <div class="section active" id="sec-1">
+    <div class="section-header">
+      <div class="section-label">Section 01 of 07</div>
+      <div class="section-title">Insured Details</div>
+      <div class="section-desc">Basic information about the business and its operations.</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-group-title">Business Identity</div>
+      <div class="field-row full">
+        <div class="field">
+          <label for="insuredName">Insured / Trading Name <span class="req">*</span></label>
+          <input type="text" id="insuredName" placeholder="Full legal trading name" data-label="Insured Name" data-required>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="ownerName">Owner / Principal Name <span class="req">*</span></label>
+          <input type="text" id="ownerName" placeholder="Full name of business owner" data-label="Owner Name" data-required>
+        </div>
+        <div class="field">
+          <label for="ownerExperienceYears">Years of Experience in the Jewellery Industry <span class="req">*</span></label>
+          <select id="ownerExperienceYears" data-label="Owner Industry Experience" data-required>
+            <option value="">Select range</option>
+            <option>Less than 1 year</option>
+            <option>1–3 years</option>
+            <option>3–5 years</option>
+            <option>5–10 years</option>
+            <option>10–20 years</option>
+            <option>20+ years</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-row full">
+        <div class="field">
+          <label for="ownerBackground">Previous Experience &amp; Background
+            <span class="hint">Briefly describe prior roles, markets, or specialisations in the trade</span>
+          </label>
+          <textarea id="ownerBackground" placeholder="e.g. Previously managed a wholesale diamond trading business in Antwerp for 8 years before establishing retail operations in Dubai in 2015. Specialises in high-end coloured gemstones." data-label="Owner Background & Previous Experience"></textarea>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="email">Email Address <span class="req">*</span></label>
+          <input type="email" id="email" placeholder="contact@business.ae" data-label="Email" data-required>
+        </div>
+        <div class="field">
+          <label for="phone">Phone / WhatsApp</label>
+          <input type="tel" id="phone" placeholder="+971 __ ___ ____" data-label="Phone">
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-group-title">Business Address</div>
+      <div class="field-row trio">
+        <div class="field">
+          <label for="officeNo">Office / Store / Floor No.</label>
+          <input type="text" id="officeNo" placeholder="e.g. Shop 12, Floor 2" data-label="Office/Store/Floor No.">
+        </div>
+        <div class="field">
+          <label for="building">Name of Building</label>
+          <input type="text" id="building" placeholder="e.g. Gold Souk Tower" data-label="Building Name">
+        </div>
+        <div class="field">
+          <label for="area">Area / District</label>
+          <input type="text" id="area" placeholder="e.g. Deira, Bur Dubai" data-label="Area">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="city">City <span class="req">*</span></label>
+          <select id="city" data-label="City" data-required>
+            <option value="">Select city</option>
+            <option>Dubai</option>
+            <option>Abu Dhabi</option>
+            <option>Sharjah</option>
+            <option>Ajman</option>
+            <option>Ras Al Khaimah</option>
+            <option>Fujairah</option>
+            <option>Umm Al Quwain</option>
+            <option>Riyadh</option>
+            <option>Jeddah</option>
+            <option>Kuwait City</option>
+            <option>Doha</option>
+            <option>Manama</option>
+            <option>Muscat</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="country">Country <span class="req">*</span></label>
+          <select id="country" data-label="Country" data-required>
+            <option value="">Select country</option>
+            <option selected>United Arab Emirates</option>
+            <option>Saudi Arabia</option>
+            <option>Kuwait</option>
+            <option>Qatar</option>
+            <option>Bahrain</option>
+            <option>Oman</option>
+            <option>Jordan</option>
+            <option>Lebanon</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-group-title">Operation Type</div>
+      <div class="field-row full">
+        <div class="field">
+          <label>Type of Operation <span class="req">*</span><span class="hint">Select all that apply</span></label>
+          <div class="check-group" id="operationType">
+            <label class="check-option" onclick="toggleCheck(this,'operationType')">
+              <input type="checkbox" value="Retail"> Retail
+            </label>
+            <label class="check-option" onclick="toggleCheck(this,'operationType')">
+              <input type="checkbox" value="Wholesale"> Wholesale
+            </label>
+            <label class="check-option" onclick="toggleCheck(this,'operationType')">
+              <input type="checkbox" value="Manufacturer"> Manufacturer
+            </label>
+            <label class="check-option" onclick="toggleCheck(this,'operationType')">
+              <input type="checkbox" value="Repairs & Services"> Repairs & Services
+            </label>
+            <label class="check-option" onclick="toggleCheck(this,'operationType')">
+              <input type="checkbox" value="Online/E-commerce"> Online / E-commerce
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="yearsInOperation">Years in Operation <span class="req">*</span></label>
+          <select id="yearsInOperation" data-label="Years in Operation" data-required>
+            <option value="">Select range</option>
+            <option>Less than 1 year</option>
+            <option>1–3 years</option>
+            <option>3–5 years</option>
+            <option>5–10 years</option>
+            <option>10–20 years</option>
+            <option>20+ years</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="numEmployees">Number of Employees <span class="req">*</span></label>
+          <select id="numEmployees" data-label="Number of Employees" data-required>
+            <option value="">Select range</option>
+            <option>1–5</option>
+            <option>6–10</option>
+            <option>11–20</option>
+            <option>21–50</option>
+            <option>50+</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <div></div>
+      <button class="btn btn-next" onclick="nextSection(1)">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ═══ SECTION 2: Stock & Values ═══ -->
+  <div class="section" id="sec-2">
+    <div class="section-header">
+      <div class="section-label">Section 02 of 07</div>
+      <div class="section-title">Stock & Values</div>
+      <div class="section-desc">Provide accurate stock valuations — these directly determine your coverage and premium.</div>
+    </div>
+
+    <div class="info-callout">
+      All values should represent your business stock only. Goods held in trust for others must be declared separately below.
+    </div>
+
+    <div class="field-group">
+      <div class="field-group-title">Valuation Settings</div>
+      <div class="field-row">
+        <div class="field">
+          <label>Valuation Basis <span class="req">*</span></label>
+          <div class="radio-group" id="valuationBasis">
+            <label class="radio-option" onclick="setRadio(this,'valuationBasis');toggleCond('valuationBasis','Other','cond-valuation-other')">
+              <input type="radio" name="valuationBasis" value="Cost Price"> Cost Price
+            </label>
+            <label class="radio-option" onclick="setRadio(this,'valuationBasis');toggleCond('valuationBasis','Other','cond-valuation-other')">
+              <input type="radio" name="valuationBasis" value="Replacement Cost"> Replacement Cost
+            </label>
+            <label class="radio-option" onclick="setRadio(this,'valuationBasis');toggleCond('valuationBasis','Other','cond-valuation-other')">
+              <input type="radio" name="valuationBasis" value="Other"> Other
+            </label>
+          </div>
+          <div class="conditional" id="cond-valuation-other">
+            <div class="field" style="margin-top:0;">
+              <label for="valuationBasisOther">Please specify valuation basis
+                <span class="hint">e.g. Market value, agreed value, depreciated cost</span>
+              </label>
+              <textarea id="valuationBasisOther" placeholder="Describe the valuation basis to be applied..." data-label="Valuation Basis — Other (specify)" style="min-height:60px;"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label for="currency">Currency <span class="req">*</span></label>
+          <select id="currency" data-label="Currency" data-required onchange="syncCurrency(this.value)">
+            <option value="">Select currency</option>
+            <optgroup label="GCC Currencies">
+              <option value="AED">AED — UAE Dirham</option>
+              <option value="SAR">SAR — Saudi Riyal</option>
+              <option value="KWD">KWD — Kuwaiti Dinar</option>
+              <option value="QAR">QAR — Qatari Riyal</option>
+              <option value="BHD">BHD — Bahraini Dinar</option>
+              <option value="OMR">OMR — Omani Rial</option>
+            </optgroup>
+            <optgroup label="International">
+              <option value="USD">USD — US Dollar</option>
+              <option value="GBP">GBP — British Pound</option>
+              <option value="EUR">EUR — Euro</option>
+            </optgroup>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-group-title">Total Stock Values</div>
+      <div class="field-row">
+        <div class="field">
+          <label for="avgTotalValue">Average Total Value — Last 12 Months <span class="req">*</span></label>
+          <div class="currency-wrap">
+            <span class="curr-symbol" id="sym1">AED</span>
+            <input type="number" id="avgTotalValue" placeholder="0" min="0" data-label="Avg Total Stock Value (12m)" data-required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="maxTotalValue">Maximum Total Value — Peak Period <span class="req">*</span>
+            <span class="hint">State the rough period below</span>
+          </label>
+          <div class="currency-wrap">
+            <span class="curr-symbol" id="sym2">AED</span>
+            <input type="number" id="maxTotalValue" placeholder="0" min="0" data-label="Max Total Stock Value (peak)" data-required>
+          </div>
+        </div>
+      </div>
+      <div class="field-row full">
+        <div class="field">
+          <label for="peakPeriod">Peak Period Description</label>
+          <input type="text" id="peakPeriod" placeholder="e.g. Ramadan, Eid, Wedding Season (March–May)" data-label="Peak Period">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="ownStock">Own Stock Value <span class="req">*</span></label>
+          <div class="currency-wrap">
+            <span class="curr-symbol" id="sym3">AED</span>
+            <input type="number" id="ownStock" placeholder="0" min="0" data-label="Own Stock Value" data-required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="goodsInTrust">Goods in Trust (Customer / Consignment)</label>
+          <div class="currency-wrap">
+            <span class="curr-symbol" id="sym4">AED</span>
+            <input type="number" id="goodsInTrust" placeholder="0" min="0" data-label="Goods in Trust Value">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-group-title">Nature of Stock (%)</div>
+      <div class="info-callout" style="margin-bottom:1rem;">Percentages must total 100%. Leave blank if not applicable.</div>
+      <div class="field-row trio">
+        <div class="field">
+          <label for="pctJewellery">Jewellery %</label>
+          <input type="number" id="pctJewellery" placeholder="0" min="0" max="100" data-label="Stock % — Jewellery" oninput="calcStockTotal()">
+        </div>
+        <div class="field">
+          <label for="pctStones">Precious Stones %</label>
+          <input type="number" id="pctStones" placeholder="0" min="0" max="100" data-label="Stock % — Precious Stones" oninput="calcStockTotal()">
+        </div>
+        <div class="field">
+          <label for="pctBullion">Bullion / Gold / Silver %</label>
+          <input type="number" id="pctBullion" placeholder="0" min="0" max="100" data-label="Stock % — Bullion" oninput="calcStockTotal()">
+        </div>
+      </div>
+      <div class="field-row trio">
+        <div class="field">
+          <label for="pctWatches">Watches %</label>
+          <input type="number" id="pctWatches" placeholder="0" min="0" max="100" data-label="Stock % — Watches" oninput="calcStockTotal()">
+        </div>
+        <div class="field">
+          <label for="pctOther">Other %</label>
+          <input type="number" id="pctOther" placeholder="0" min="0" max="100" data-label="Stock % — Other" oninput="calcStockTotal()">
+        </div>
+        <div class="field">
+          <label>Total</label>
+          <input type="text" id="stockTotal" readonly value="0%" style="background:#f5f0e8; font-weight:500;">
+        </div>
+      </div>
+      <div class="field-row full" id="otherStockDesc" style="display:none;">
+        <div class="field">
+          <label for="pctOtherDesc">Describe "Other" Stock</label>
+          <input type="text" id="pctOtherDesc" placeholder="e.g. Fashion accessories, silverware" data-label="Other Stock Description">
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button class="btn btn-prev" onclick="prevSection(2)">← Back</button>
+      <button class="btn btn-next" onclick="nextSection(2)">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ═══ SECTION 3: Premises & Safe ═══ -->
+  <div class="section" id="sec-3">
+    <div class="section-header">
+      <div class="section-label">Section 03 of 07</div>
+      <div class="section-title">Premises & Safe Risk</div>
+      <div class="section-desc">Stock storage details during and outside business hours.</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-group-title">Values Outside Safe (Outside Business Hours)</div>
+      <div class="field-row full">
+        <div class="field">
+          <label for="maxOutsideSafe">Maximum Value Stored Outside Locked Safe <span class="req">*</span>
+            <span class="hint">During non-business hours & temporary closures (e.g. lunch)</span>
+          </label>
+          <div class="currency-wrap">
+            <span class="curr-symbol" id="sym5">AED</span>
+            <input type="number" id="maxOutsideSafe" placeholder="0" min="0" data-label="Max Value Outside Safe" data-required>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-group-title">Window Display</div>
+      <div class="field-row">
+        <div class="field">
+          <label for="windowDisplayValue">Average Total Value in Display Windows
+            <span class="hint">Leave 0 if no window display</span>
+          </label>
+          <div class="currency-wrap">
+            <span class="curr-symbol" id="sym7">AED</span>
+            <input type="number" id="windowDisplayValue" placeholder="0" min="0" data-label="Window Display Value" value="0">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-group-title">Showcase Protection</div>
+      <div class="field-row">
+        <div class="field">
+          <label>Are all showcases locked during business hours? <span class="req">*</span></label>
+          <div class="radio-group" id="showcasesLocked">
+            <label class="radio-option" onclick="setRadio(this,'showcasesLocked')"><input type="radio" value="Yes"> Yes</label>
+            <label class="radio-option" onclick="setRadio(this,'showcasesLocked')"><input type="radio" value="No"> No</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>Are there any open display showcases? <span class="req">*</span></label>
+          <div class="radio-group" id="openShowcases">
+            <label class="radio-option" onclick="setRadio(this,'openShowcases');toggleCond('openShowcases','Yes','cond-showcase')"><input type="radio" value="Yes"> Yes</label>
+            <label class="radio-option" onclick="setRadio(this,'openShowcases');toggleCond('openShowcases','Yes','cond-showcase')"><input type="radio" value="No"> No</label>
+          </div>
+        </div>
+      </div>
+      <div class="conditional" id="cond-showcase">
+        <div class="field-row trio">
+          <div class="field">
+            <label for="openShowcasePct">% of Stock in Open Showcases</label>
+            <input type="number" id="openShowcasePct" placeholder="0" min="0" max="100" data-label="% Stock in Open Showcases">
+          </div>
+          <div class="field">
+            <label for="openShowcaseValue">Average Value in Open Showcases</label>
+            <div class="currency-wrap">
+              <span class="curr-symbol">AED</span>
+              <input type="number" id="openShowcaseValue" placeholder="0" min="0" data-label="Open Showcase Value">
+            </div>
+          </div>
+          <div class="field">
+            <label>Not easily reached by customers?</label>
+            <div class="radio-group" id="showcaseNotReachable">
+              <label class="radio-option" onclick="setRadio(this,'showcaseNotReachable')"><input type="radio" value="Yes"> Yes</label>
+              <label class="radio-option" onclick="setRadio(this,'showcaseNotReachable')"><input type="radio" value="No"> No</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button class="btn btn-prev" onclick="prevSection(3)">← Back</button>
+      <button class="btn btn-next" onclick="nextSection(3)">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ═══ SECTION 4: Security ═══ -->
+  <div class="section" id="sec-4">
+    <div class="section-header">
+      <div class="section-label">Section 04 of 07</div>
+      <div class="section-title">Security Details</div>
+      <div class="section-desc">Security measures directly impact underwriting. Please answer accurately.</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-group-title">Installed Security Systems</div>
+      <div class="field-row">
+        <div class="field">
+          <label>CCTV Installed? <span class="req">*</span></label>
+          <div class="radio-group" id="cctv">
+            <label class="radio-option" onclick="setRadio(this,'cctv')"><input type="radio" value="Yes"> Yes</label>
+            <label class="radio-option" onclick="setRadio(this,'cctv')"><input type="radio" value="No"> No</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>Alarm System in Place? <span class="req">*</span></label>
+          <div class="radio-group" id="alarmSystem">
+            <label class="radio-option" onclick="setRadio(this,'alarmSystem');toggleCond('alarmSystem','Yes','cond-alarm')"><input type="radio" value="Yes"> Yes</label>
+            <label class="radio-option" onclick="setRadio(this,'alarmSystem');toggleCond('alarmSystem','Yes','cond-alarm')"><input type="radio" value="No"> No</label>
+          </div>
+        </div>
+      </div>
+      <div class="conditional" id="cond-alarm">
+        <div class="field-row">
+          <div class="field">
+            <label>SIRA Certified Alarm? <span class="hint">(Required for UAE premises)</span></label>
+            <div class="radio-group" id="siraCertified">
+              <label class="radio-option" onclick="setRadio(this,'siraCertified')"><input type="radio" value="Yes"> Yes</label>
+              <label class="radio-option" onclick="setRadio(this,'siraCertified')"><input type="radio" value="No"> No</label>
+              <label class="radio-option" onclick="setRadio(this,'siraCertified')"><input type="radio" value="Not Applicable"> N/A</label>
+            </div>
+          </div>
+          <div class="field">
+            <label>Motion Sensors?</label>
+            <div class="radio-group" id="sensors">
+              <label class="radio-option" onclick="setRadio(this,'sensors')"><input type="radio" value="Yes"> Yes</label>
+              <label class="radio-option" onclick="setRadio(this,'sensors')"><input type="radio" value="No"> No</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Security Shutters / Roller Doors? <span class="req">*</span></label>
+          <div class="radio-group" id="shutters">
+            <label class="radio-option" onclick="setRadio(this,'shutters')"><input type="radio" value="Yes"> Yes</label>
+            <label class="radio-option" onclick="setRadio(this,'shutters')"><input type="radio" value="No"> No</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>Is the Premises Occupied at Night? <span class="req">*</span></label>
+          <div class="radio-group" id="premisesOccupied">
+            <label class="radio-option" onclick="setRadio(this,'premisesOccupied');toggleCond('premisesOccupied','Yes','cond-occupied')"><input type="radio" value="Yes"> Yes</label>
+            <label class="radio-option" onclick="setRadio(this,'premisesOccupied');toggleCond('premisesOccupied','Yes','cond-occupied')"><input type="radio" value="No"> No</label>
+          </div>
+        </div>
+      </div>
+      <div class="conditional" id="cond-occupied">
+        <div class="field">
+          <label for="occupiedBy">Occupied By (state who)</label>
+          <input type="text" id="occupiedBy" placeholder="e.g. Security guard, owner lives above premises" data-label="Premises Occupied By">
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button class="btn btn-prev" onclick="prevSection(4)">← Back</button>
+      <button class="btn btn-next" onclick="nextSection(4)">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ═══ SECTION 5: Carryings & Extensions ═══ -->
+  <div class="section" id="sec-5">
+    <div class="section-header">
+      <div class="section-label">Section 05 of 07</div>
+      <div class="section-title">Carryings & Extensions</div>
+      <div class="section-desc">Coverage for stock carried outside the premises, home risks, entrustments and exhibitions.</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-group-title">Carryings of Stock Outside Premises (Employees)</div>
+      <div class="field-row full">
+        <div class="field">
+          <label>Do employees carry stock outside premises? <span class="req">*</span></label>
+          <div class="radio-group" id="hasCarryings">
+            <label class="radio-option" onclick="setRadio(this,'hasCarryings');toggleCond('hasCarryings','Yes','cond-carryings')"><input type="radio" value="Yes"> Yes</label>
+            <label class="radio-option" onclick="setRadio(this,'hasCarryings');toggleCond('hasCarryings','Yes','cond-carryings')"><input type="radio" value="No"> No</label>
+          </div>
+        </div>
+      </div>
+      <div class="conditional" id="cond-carryings">
+        <div class="field-row">
+          <div class="field">
+            <label>Frequency <span class="req">*</span></label>
+            <select id="carryingsFrequency" data-label="Carryings Frequency">
+              <option value="">Select</option>
+              <option>Regularly (weekly+)</option>
+              <option>Occasionally</option>
+              <option>Rarely</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Geographic Scope</label>
+            <select id="carryingsScope" data-label="Carryings Geographic Scope">
+              <option value="">Select</option>
+              <option>City only</option>
+              <option>Country wide</option>
+              <option>Within GCC region</option>
+              <option>Outside GCC</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="carryingsAvgAmount">Average Amount Per Employee Per Trip</label>
+            <div class="currency-wrap">
+              <span class="curr-symbol">AED</span>
+              <input type="number" id="carryingsAvgAmount" placeholder="0" min="0" data-label="Carryings — Avg Amount">
+            </div>
+          </div>
+          <div class="field">
+            <label for="carryingsMaxAmount">Maximum Amount Per Employee Per Trip</label>
+            <div class="currency-wrap">
+              <span class="curr-symbol">AED</span>
+              <input type="number" id="carryingsMaxAmount" placeholder="0" min="0" data-label="Carryings — Max Amount">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="field-group">
+      <div class="field-group-title">Home Risk (Private Dwelling)</div>
+      <div class="field-row full">
+        <div class="field">
+          <label>Does any principal/employee take stock to a private residence? <span class="req">*</span></label>
+          <div class="radio-group" id="hasHomeRisk">
+            <label class="radio-option" onclick="setRadio(this,'hasHomeRisk');toggleCond('hasHomeRisk','Yes','cond-home')"><input type="radio" value="Yes"> Yes</label>
+            <label class="radio-option" onclick="setRadio(this,'hasHomeRisk');toggleCond('hasHomeRisk','Yes','cond-home')"><input type="radio" value="No"> No</label>
+          </div>
+        </div>
+      </div>
+      <div class="conditional" id="cond-home">
+        <div class="field-row">
+          <div class="field">
+            <label for="homeRiskReason">Reason for Home Risk</label>
+            <input type="text" id="homeRiskReason" placeholder="e.g. Showing to client, secure overnight storage" data-label="Home Risk Reason">
+          </div>
+          <div class="field">
+            <label for="homeRiskAddress">Address of Private Dwelling</label>
+            <input type="text" id="homeRiskAddress" placeholder="Full address" data-label="Home Risk Address">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="field-group">
+      <div class="field-group-title">Entrustments (if coverage needed)</div>
+      <div class="info-callout">Stock entrusted to dealers, customers, repairers, cutters, setters etc.</div>
+      <div class="field-row full">
+        <div class="field">
+          <label>Is entrustment coverage required?</label>
+          <div class="radio-group" id="hasEntrustment">
+            <label class="radio-option" onclick="setRadio(this,'hasEntrustment');toggleCond('hasEntrustment','Yes','cond-entrustment')"><input type="radio" value="Yes"> Yes</label>
+            <label class="radio-option" onclick="setRadio(this,'hasEntrustment');toggleCond('hasEntrustment','Yes','cond-entrustment')"><input type="radio" value="No"> No</label>
+          </div>
+        </div>
+      </div>
+      <div class="conditional" id="cond-entrustment">
+        <div class="field-row">
+          <div class="field">
+            <label for="entrustmentEstimated">Estimated Total Value Entrusted (Last 12 months)</label>
+            <div class="currency-wrap">
+              <span class="curr-symbol">AED</span>
+              <input type="number" id="entrustmentEstimated" placeholder="0" min="0" data-label="Entrustment — Estimated Total">
+            </div>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="entrustmentAvg">Average Entrusted Value (at any one time)</label>
+            <div class="currency-wrap">
+              <span class="curr-symbol">AED</span>
+              <input type="number" id="entrustmentAvg" placeholder="0" min="0" data-label="Entrustment — Avg Value">
+            </div>
+          </div>
+          <div class="field">
+            <label for="entrustmentMax">Maximum Entrusted Value (at any one time)</label>
+            <div class="currency-wrap">
+              <span class="curr-symbol">AED</span>
+              <input type="number" id="entrustmentMax" placeholder="0" min="0" data-label="Entrustment — Max Value">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="field-group">
+      <div class="field-group-title">Exhibitions (if coverage needed)</div>
+      <div class="field-row full">
+        <div class="field">
+          <label>Is exhibition coverage required?</label>
+          <div class="radio-group" id="hasExhibition">
+            <label class="radio-option" onclick="setRadio(this,'hasExhibition');toggleCond('hasExhibition','Yes','cond-exhibition')"><input type="radio" value="Yes"> Yes</label>
+            <label class="radio-option" onclick="setRadio(this,'hasExhibition');toggleCond('hasExhibition','Yes','cond-exhibition')"><input type="radio" value="No"> No</label>
+          </div>
+        </div>
+      </div>
+      <div class="conditional" id="cond-exhibition">
+        <div class="field-row">
+          <div class="field">
+            <label for="exhibitionLimit">Limit Required per Named Exhibition</label>
+            <div class="currency-wrap">
+              <span class="curr-symbol">AED</span>
+              <input type="number" id="exhibitionLimit" placeholder="0" min="0" data-label="Exhibition Limit">
+            </div>
+          </div>
+          <div class="field">
+            <label for="exhibitionCount">Number of Exhibitions (Next 12 Months)</label>
+            <input type="number" id="exhibitionCount" placeholder="0" min="0" data-label="Exhibition Count">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Static Coverage Only?</label>
+            <div class="radio-group" id="exhibitionStatic">
+              <label class="radio-option" onclick="setRadio(this,'exhibitionStatic')"><input type="radio" value="Yes"> Yes — static only</label>
+              <label class="radio-option" onclick="setRadio(this,'exhibitionStatic')"><input type="radio" value="No"> No — transit also needed</label>
+            </div>
+          </div>
+        </div>
+        <div class="field-row full" id="cond-transit-row" style="margin-top:0.8rem;">
+          <div class="field">
+            <label for="exhibitionTransit">How will stock be delivered to exhibitions?
+              <span class="hint">e.g. Personal carryings, Transguard, Malca Amit, Brinks</span>
+            </label>
+            <input type="text" id="exhibitionTransit" placeholder="Describe transportation method" data-label="Exhibition Transit Method">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="field-group">
+      <div class="field-group-title">Furniture, Fixtures & Fittings (if coverage needed)</div>
+      <div class="info-callout">Cover for the physical contents of the premises including display cabinets, shelving, counters, lighting, safes, and other fixed or loose fittings.</div>
+      <div class="field-row full">
+        <div class="field">
+          <label>Is coverage required for furniture, fixtures &amp; fittings?</label>
+          <div class="radio-group" id="hasFFF">
+            <label class="radio-option" onclick="setRadio(this,'hasFFF');toggleCond('hasFFF','Yes','cond-fff')"><input type="radio" value="Yes"> Yes</label>
+            <label class="radio-option" onclick="setRadio(this,'hasFFF');toggleCond('hasFFF','Yes','cond-fff')"><input type="radio" value="No"> No</label>
+          </div>
+        </div>
+      </div>
+      <div class="conditional" id="cond-fff">
+        <div class="field-row">
+          <div class="field">
+            <label for="fffLimit">Limit Required <span class="req">*</span>
+              <span class="hint">Total replacement value of all fixtures, fittings & furniture</span>
+            </label>
+            <div class="currency-wrap">
+              <span class="curr-symbol">AED</span>
+              <input type="number" id="fffLimit" placeholder="0" min="0" data-label="FF&F — Limit Required">
+            </div>
+          </div>
+          <div class="field">
+            <label for="fffDescription">Brief Description
+              <span class="hint">e.g. Display showcases, safe, counters, fit-out</span>
+            </label>
+            <input type="text" id="fffDescription" placeholder="Describe the main items to be covered" data-label="FF&F — Description">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button class="btn btn-prev" onclick="prevSection(5)">← Back</button>
+      <button class="btn btn-next" onclick="nextSection(5)">Continue →</button>
+    </div>
+  </div>
+  <div class="section" id="sec-6">
+    <div class="section-header">
+      <div class="section-label">Section 06 of 07</div>
+      <div class="section-title">Loss History</div>
+      <div class="section-desc">Honest disclosure is required. Non-disclosure may affect validity of coverage.</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-group-title">Claims in the Last 5 Years</div>
+      <div class="field-row full">
+        <div class="field">
+          <label>Have you had any claims in the last 5 years? <span class="req">*</span></label>
+          <div class="radio-group" id="hasClaims">
+            <label class="radio-option" onclick="setRadio(this,'hasClaims');toggleCond('hasClaims','Yes','cond-claims')"><input type="radio" value="Yes"> Yes</label>
+            <label class="radio-option" onclick="setRadio(this,'hasClaims');toggleCond('hasClaims','Yes','cond-claims')"><input type="radio" value="No"> No — no losses to declare</label>
+          </div>
+        </div>
+      </div>
+      <div class="conditional" id="cond-claims">
+        <div style="margin-bottom:0.8rem;">
+          <table class="claims-table" id="claimsTable">
+            <thead>
+              <tr>
+                <th>Year</th>
+                <th>Nature of Loss</th>
+                <th>Amount Claimed</th>
+                <th>Amount Paid</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="claimsBody"></tbody>
+          </table>
+        </div>
+        <button class="btn-add-row" onclick="addClaimRow()">+ Add Claim</button>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="field-group">
+      <div class="field-group-title">Previous Policy History</div>
+      <div class="field-row full">
+        <div class="field">
+          <label>Has any previous policy been declined, cancelled, or had special conditions imposed? <span class="req">*</span></label>
+          <div class="radio-group" id="prevDeclined">
+            <label class="radio-option" onclick="setRadio(this,'prevDeclined');toggleCond('prevDeclined','Yes','cond-declined')"><input type="radio" value="Yes"> Yes</label>
+            <label class="radio-option" onclick="setRadio(this,'prevDeclined');toggleCond('prevDeclined','Yes','cond-declined')"><input type="radio" value="No"> No</label>
+          </div>
+        </div>
+      </div>
+      <div class="conditional" id="cond-declined">
+        <div class="field">
+          <label for="prevDeclinedDetails">Please provide details</label>
+          <textarea id="prevDeclinedDetails" placeholder="State insurer, reason, and year..." data-label="Previous Declined/Cancelled Policy Details"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button class="btn btn-prev" onclick="prevSection(6)">← Back</button>
+      <button class="btn btn-next" onclick="nextSection(6)">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ═══ SECTION 7: Review & Submit ═══ -->
+  <div class="section" id="sec-7">
+    <div class="section-header">
+      <div class="section-label">Section 07 of 07</div>
+      <div class="section-title">Review & Submit</div>
+      <div class="section-desc">Please review all information before submitting. Your data will be used to calculate an indicative premium.</div>
+    </div>
+
+    <div id="review-content"></div>
+
+    <div class="field-group" style="margin-top:2rem;">
+      <div class="field-group-title">Declaration</div>
+      <div class="info-callout">
+        By initialling and dating below, I confirm that all information provided in this proposal is true, accurate and complete to the best of my knowledge. I understand that any material misrepresentation or non-disclosure may render any policy issued voidable and may affect the validity of any claim.
+      </div>
+      <div class="field-row full" style="margin-top:1rem;">
+        <div class="field">
+          <label class="check-option" onclick="toggleCheck(this,'declaration')" id="declChk">
+            <input type="checkbox" value="agreed"> I agree to the above declaration and consent to my data being processed for insurance purposes.
+          </label>
+        </div>
+      </div>
+      <div class="field-row" style="margin-top:1.2rem;">
+        <div class="field">
+          <label for="declarationInitials">Initials <span class="req">*</span>
+            <span class="hint">Enter your initials to confirm the above</span>
+          </label>
+          <input type="text" id="declarationInitials" placeholder="e.g. A.K." maxlength="10" data-label="Declaration Initials" style="text-transform:uppercase; letter-spacing:0.15em; font-weight:500;" data-required>
+        </div>
+        <div class="field">
+          <label for="declarationDate">Date <span class="req">*</span>
+            <span class="hint">Date of signing this declaration</span>
+          </label>
+          <input type="date" id="declarationDate" data-label="Declaration Date" data-required>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button class="btn btn-prev" onclick="prevSection(7)">← Back</button>
+      <div style="display:flex;gap:0.8rem;">
+        <button class="btn btn-export" onclick="exportJSON()">Export JSON</button>
+        <button class="btn btn-export" onclick="exportCSV()">Export CSV</button>
+        <button class="btn btn-submit" onclick="submitForm()">Submit Proposal →</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- SUCCESS SCREEN -->
+<div id="success-screen">
+  <div class="success-icon">✓</div>
+  <h2 style="font-size:1.8rem;font-weight:300;margin-bottom:0.5rem;">Proposal Submitted</h2>
+  <p style="color:var(--muted);font-size:0.9rem;">Thank you. Your underwriter will be in touch shortly.</p>
+  <div class="success-ref" id="success-ref-display"></div>
+  <div class="export-row" style="justify-content:center;margin-top:2rem;">
+    <button class="btn-export" onclick="exportJSON()">Download JSON</button>
+    <button class="btn-export" onclick="exportCSV()">Download CSV</button>
+    <button class="btn-export" onclick="window.print()">Print</button>
+  </div>
+</div>
+
+<script>
+// ── STEPS CONFIG ──
+const steps = [
+  { id: 1, label: 'Insured Details' },
+  { id: 2, label: 'Stock & Values' },
+  { id: 3, label: 'Premises & Safe' },
+  { id: 4, label: 'Security' },
+  { id: 5, label: 'Carryings & Extensions' },
+  { id: 6, label: 'Loss History' },
+  { id: 7, label: 'Review & Submit' },
+];
+
+let currentSection = 1;
+const doneSteps = new Set();
+
+// ── INIT ──
+function init() {
+  // Render nav
+  const nav = document.getElementById('stepsNav');
+  steps.forEach(s => {
+    const tab = document.createElement('div');
+    tab.className = 'step-tab';
+    tab.id = `tab-${s.id}`;
+    tab.innerHTML = `<span class="step-num">${s.id}</span>${s.label}`;
+    tab.onclick = () => goToSection(s.id);
+    nav.appendChild(tab);
+  });
+  updateNav();
+
+  // Form ref
+  const ref = 'JB-' + Date.now().toString(36).toUpperCase();
+  window._formRef = ref;
+  document.getElementById('form-date-display').textContent = new Date().toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
+
+  // Currency sync
+  document.querySelectorAll('[id^="sym"]').forEach(el => { /* handled by radio */ });
+
+  // Add initial claim row
+  addClaimRow();
+}
+
+function updateNav() {
+  steps.forEach(s => {
+    const tab = document.getElementById(`tab-${s.id}`);
+    tab.className = 'step-tab';
+    if (doneSteps.has(s.id)) tab.classList.add('done');
+    if (s.id === currentSection) tab.classList.add('active');
+  });
+  const pct = ((currentSection - 1) / (steps.length - 1)) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+function goToSection(id) {
+  document.getElementById(`sec-${currentSection}`).classList.remove('active');
+  currentSection = id;
+  document.getElementById(`sec-${id}`).classList.add('active');
+  updateNav();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (id === 7) buildReview();
+}
+
+function nextSection(from) {
+  if (!validateSection(from)) return;
+  doneSteps.add(from);
+  goToSection(from + 1);
+}
+
+function prevSection(from) {
+  goToSection(from - 1);
+}
+
+// ── VALIDATION ──
+function validateSection(secId) {
+  const sec = document.getElementById(`sec-${secId}`);
+  let valid = true;
+
+  // Required text/number/select
+  sec.querySelectorAll('[data-required]').forEach(el => {
+    const v = el.value.trim();
+    el.classList.remove('error');
+    if (!v) { el.classList.add('error'); valid = false; }
+  });
+
+  // Stock total
+  if (secId === 2) {
+    const total = parseInt(document.getElementById('stockTotal').value) || 0;
+    const hasAny = ['pctJewellery','pctStones','pctBullion','pctWatches','pctOther'].some(id => parseInt(document.getElementById(id).value) > 0);
+    if (hasAny && total !== 100) {
+      alert('Stock composition percentages must total 100%.');
+      valid = false;
+    }
+  }
+
+  if (!valid) {
+    const first = sec.querySelector('.error');
+    if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  return valid;
+}
+
+// ── RADIO / CHECK ──
+function setRadio(el, groupId) {
+  document.querySelectorAll(`#${groupId} .radio-option`).forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  el.querySelector('input').checked = true;
+}
+
+function toggleCheck(el, groupId) {
+  el.classList.toggle('selected');
+  el.querySelector('input').checked = el.classList.contains('selected');
+}
+
+function getRadioValue(groupId) {
+  const el = document.querySelector(`#${groupId} .radio-option.selected input`);
+  return el ? el.value : '';
+}
+
+function getCheckValues(groupId) {
+  return [...document.querySelectorAll(`#${groupId} .check-option.selected input`)].map(i => i.value);
+}
+
+// ── CONDITIONAL BLOCKS ──
+function toggleCond(groupId, triggerVal, condId) {
+  const val = getRadioValue(groupId);
+  const cond = document.getElementById(condId);
+  if (val === triggerVal) {
+    cond.classList.add('show');
+  } else {
+    cond.classList.remove('show');
+  }
+}
+
+// ── STOCK TOTAL ──
+function calcStockTotal() {
+  const ids = ['pctJewellery','pctStones','pctBullion','pctWatches','pctOther'];
+  const total = ids.reduce((s, id) => s + (parseInt(document.getElementById(id).value) || 0), 0);
+  const el = document.getElementById('stockTotal');
+  el.value = total + '%';
+  el.style.color = total === 100 ? 'var(--success)' : total > 100 ? 'var(--error)' : 'var(--ink)';
+  document.getElementById('otherStockDesc').style.display =
+    (parseInt(document.getElementById('pctOther').value) > 0) ? 'grid' : 'none';
+}
+
+// ── CURRENCY SYNC ──
+function syncCurrency(val) {
+  if (!val) return;
+  document.querySelectorAll('.curr-symbol').forEach(el => el.textContent = val);
+}
+
+document.addEventListener('change', e => {
+  if (e.target.id === 'currency') syncCurrency(e.target.value);
+});
+
+// ── CLAIMS TABLE ──
+function addClaimRow() {
+  const body = document.getElementById('claimsBody');
+  const yr = new Date().getFullYear();
+  const row = document.createElement('tr');
+  row.innerHTML = `
+    <td><select style="width:90px"><option value="">Year</option>${Array.from({length:6},(_,i)=>`<option>${yr-i}</option>`).join('')}</select></td>
+    <td><input type="text" placeholder="e.g. Theft, Burglary" style="width:150px"></td>
+    <td><input type="number" placeholder="0" min="0" style="width:110px"></td>
+    <td><input type="number" placeholder="0" min="0" style="width:110px"></td>
+    <td><select style="width:100px"><option value="">Status</option><option>Paid</option><option>Pending</option><option>Repudiated</option></select></td>
+    <td><button class="btn-remove-row" onclick="this.closest('tr').remove()">✕</button></td>
+  `;
+  body.appendChild(row);
+}
+
+function getClaimsData() {
+  const rows = document.querySelectorAll('#claimsBody tr');
+  return [...rows].map(row => {
+    const cells = row.querySelectorAll('input, select');
+    return {
+      year: cells[0].value,
+      nature: cells[1].value,
+      amountClaimed: cells[2].value,
+      amountPaid: cells[3].value,
+      status: cells[4].value
+    };
+  }).filter(r => r.year || r.nature);
+}
+
+// ── COLLECT ALL DATA ──
+function collectData() {
+  const v = id => (document.getElementById(id) || {}).value || '';
+  const r = id => getRadioValue(id);
+  const c = id => getCheckValues(id);
+
+  return {
+    _meta: {
+      ref: window._formRef,
+      submittedAt: new Date().toISOString(),
+      form: 'Jewellers Block Insurance Proposal'
+    },
+    insuredDetails: {
+      insuredName: v('insuredName'),
+      ownerName: v('ownerName'),
+      ownerIndustryExperience: v('ownerExperienceYears'),
+      ownerBackgroundAndPreviousExperience: v('ownerBackground'),
+      email: v('email'),
+      phone: v('phone'),
+      officeNo: v('officeNo'),
+      building: v('building'),
+      area: v('area'),
+      city: v('city'),
+      country: v('country'),
+      operationType: c('operationType'),
+      yearsInOperation: v('yearsInOperation'),
+      numberOfEmployees: v('numEmployees'),
+    },
+    stockValues: {
+      valuationBasis: r('valuationBasis'),
+      valuationBasisOther: v('valuationBasisOther'),
+      currency: v('currency'),
+      avgTotalValue12m: v('avgTotalValue'),
+      maxTotalValuePeak: v('maxTotalValue'),
+      peakPeriodDescription: v('peakPeriod'),
+      ownStockValue: v('ownStock'),
+      goodsInTrustValue: v('goodsInTrust'),
+      stockComposition: {
+        jewellery_pct: v('pctJewellery'),
+        preciousStones_pct: v('pctStones'),
+        bullion_pct: v('pctBullion'),
+        watches_pct: v('pctWatches'),
+        other_pct: v('pctOther'),
+        otherDescription: v('pctOtherDesc'),
+      }
+    },
+    premisesRisk: {
+      maxValueOutsideSafe: v('maxOutsideSafe'),
+      windowDisplayValue: v('windowDisplayValue'),
+      showcasesLockedDuringBusiness: r('showcasesLocked'),
+      openDisplayShowcases: r('openShowcases'),
+      openShowcasePct: v('openShowcasePct'),
+      openShowcaseValue: v('openShowcaseValue'),
+      openShowcasesNotEasilyReachable: r('showcaseNotReachable'),
+    },
+    security: {
+      cctv: r('cctv'),
+      alarmSystem: r('alarmSystem'),
+      siraCertified: r('siraCertified'),
+      motionSensors: r('sensors'),
+      securityShutters: r('shutters'),
+      premisesOccupiedAtNight: r('premisesOccupied'),
+      occupiedBy: v('occupiedBy'),
+    },
+    carryingsExtensions: {
+      employeeCarryingsOutsidePremises: r('hasCarryings'),
+      carryingsFrequency: v('carryingsFrequency'),
+      carryingsGeographicScope: v('carryingsScope'),
+      carryingsAvgAmountPerEmployee: v('carryingsAvgAmount'),
+      carryingsMaxAmountPerEmployee: v('carryingsMaxAmount'),
+      homeRisk: r('hasHomeRisk'),
+      homeRiskReason: v('homeRiskReason'),
+      homeRiskAddress: v('homeRiskAddress'),
+      entrustmentCoverage: r('hasEntrustment'),
+      entrustmentEstimatedTotal: v('entrustmentEstimated'),
+      entrustmentAvgValue: v('entrustmentAvg'),
+      entrustmentMaxValue: v('entrustmentMax'),
+      exhibitionCoverage: r('hasExhibition'),
+      exhibitionLimitPerEvent: v('exhibitionLimit'),
+      exhibitionCountNextYear: v('exhibitionCount'),
+      exhibitionStaticOnly: r('exhibitionStatic'),
+      exhibitionTransitMethod: v('exhibitionTransit'),
+      furnitureFixturesFittingsCoverage: r('hasFFF'),
+      furnitureFixturesFittingsLimit: v('fffLimit'),
+      furnitureFixturesFittingsDescription: v('fffDescription'),
+    },
+    lossHistory: {
+      claimsLast5Years: r('hasClaims'),
+      claims: getClaimsData(),
+      previousPolicyDeclinedOrCancelled: r('prevDeclined'),
+      previousDeclinedDetails: v('prevDeclinedDetails'),
+    },
+    declaration: {
+      agreed: document.querySelector('#declChk')?.classList.contains('selected') || false,
+      initials: v('declarationInitials'),
+      date: v('declarationDate'),
+    }
+  };
+}
+
+// ── REVIEW ──
+function buildReview() {
+  const d = collectData();
+  const container = document.getElementById('review-content');
+
+  const fmt = val => {
+    if (!val || val === '') return '<em style="color:var(--muted)">—</em>';
+    if (Array.isArray(val)) return val.length ? val.join(', ') : '<em style="color:var(--muted)">—</em>';
+    return val;
+  };
+
+  const block = (title, items) => `
+    <div class="review-block">
+      <div class="review-block-header">${title}</div>
+      ${items.map(([k,v]) => `<div class="review-item"><div class="review-key">${k}</div><div class="review-val">${fmt(v)}</div></div>`).join('')}
+    </div>`;
+
+  const curr = d.stockValues.currency || 'AED';
+  const money = v => v ? `${curr} ${Number(v).toLocaleString()}` : '—';
+
+  container.innerHTML =
+    block('Insured Details', [
+      ['Insured Name', d.insuredDetails.insuredName],
+      ['Owner / Principal', d.insuredDetails.ownerName],
+      ['Industry Experience', d.insuredDetails.ownerIndustryExperience],
+      ['Background & Prev. Experience', d.insuredDetails.ownerBackgroundAndPreviousExperience],
+      ['Email', d.insuredDetails.email],
+      ['Phone', d.insuredDetails.phone],
+      ['Address', [d.insuredDetails.officeNo, d.insuredDetails.building, d.insuredDetails.area, d.insuredDetails.city, d.insuredDetails.country].filter(Boolean).join(', ')],
+      ['Type of Operation', d.insuredDetails.operationType],
+      ['Years in Operation', d.insuredDetails.yearsInOperation],
+      ['Employees', d.insuredDetails.numberOfEmployees],
+    ]) +
+    block('Stock & Values', [
+      ['Valuation Basis', d.stockValues.valuationBasis + (d.stockValues.valuationBasisOther ? ` — ${d.stockValues.valuationBasisOther}` : '')],
+      ['Currency', d.stockValues.currency],
+      ['Avg Total Value (12m)', money(d.stockValues.avgTotalValue12m)],
+      ['Max Total Value (peak)', money(d.stockValues.maxTotalValuePeak)],
+      ['Peak Period', d.stockValues.peakPeriodDescription],
+      ['Own Stock', money(d.stockValues.ownStockValue)],
+      ['Goods in Trust', money(d.stockValues.goodsInTrustValue)],
+      ['Stock: Jewellery', d.stockValues.stockComposition.jewellery_pct + '%'],
+      ['Stock: Precious Stones', d.stockValues.stockComposition.preciousStones_pct + '%'],
+      ['Stock: Bullion', d.stockValues.stockComposition.bullion_pct + '%'],
+      ['Stock: Watches', d.stockValues.stockComposition.watches_pct + '%'],
+      ['Stock: Other', d.stockValues.stockComposition.other_pct + '%'],
+    ]) +
+    block('Premises & Safe', [
+      ['Max Outside Safe', money(d.premisesRisk.maxValueOutsideSafe)],
+      ['Window Display Value', money(d.premisesRisk.windowDisplayValue)],
+      ['Showcases Locked', d.premisesRisk.showcasesLockedDuringBusiness],
+      ['Open Showcases', d.premisesRisk.openDisplayShowcases],
+    ]) +
+    block('Security', [
+      ['CCTV', d.security.cctv],
+      ['Alarm System', d.security.alarmSystem],
+      ['SIRA Certified', d.security.siraCertified],
+      ['Motion Sensors', d.security.motionSensors],
+      ['Security Shutters', d.security.securityShutters],
+      ['Premises Occupied at Night', d.security.premisesOccupiedAtNight],
+    ]) +
+    block('Carryings & Extensions', [
+      ['Employee Carryings', d.carryingsExtensions.employeeCarryingsOutsidePremises],
+      ['Carryings Frequency', d.carryingsExtensions.carryingsFrequency],
+      ['Geographic Scope', d.carryingsExtensions.carryingsGeographicScope],
+      ['Carryings Max/Employee', money(d.carryingsExtensions.carryingsMaxAmountPerEmployee)],
+      ['Home Risk', d.carryingsExtensions.homeRisk],
+      ['Entrustment Coverage', d.carryingsExtensions.entrustmentCoverage],
+      ['Entrustment Max Value', money(d.carryingsExtensions.entrustmentMaxValue)],
+      ['Exhibition Coverage', d.carryingsExtensions.exhibitionCoverage],
+      ['Exhibition Limit', money(d.carryingsExtensions.exhibitionLimitPerEvent)],
+      ['FF&F Coverage', d.carryingsExtensions.furnitureFixturesFittingsCoverage],
+      ['FF&F Limit Required', money(d.carryingsExtensions.furnitureFixturesFittingsLimit)],
+      ['FF&F Description', d.carryingsExtensions.furnitureFixturesFittingsDescription],
+    ]) +
+    block('Loss History', [
+      ['Claims Last 5 Years', d.lossHistory.claimsLast5Years],
+      ['Number of Claims', d.lossHistory.claims.length || '0'],
+      ['Previous Policy Declined', d.lossHistory.previousPolicyDeclinedOrCancelled],
+    ]) +
+    block('Declaration', [
+      ['Initials', d.declaration.initials],
+      ['Date Signed', d.declaration.date ? new Date(d.declaration.date).toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' }) : '—'],
+      ['Declaration Agreed', d.declaration.agreed ? 'Yes' : 'Pending'],
+    ]);
+}
+
+// ── EXPORT ──
+function exportJSON() {
+  const data = collectData();
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `JB-Proposal-${window._formRef}.json`;
+  a.click();
+}
+
+function exportCSV() {
+  const d = collectData();
+  const rows = [];
+  const flatten = (obj, prefix = '') => {
+    for (const [k, v] of Object.entries(obj)) {
+      const key = prefix ? `${prefix}.${k}` : k;
+      if (v && typeof v === 'object' && !Array.isArray(v)) flatten(v, key);
+      else rows.push([key, Array.isArray(v) ? v.join('; ') : v]);
+    }
+  };
+  flatten(d);
+  const csv = rows.map(([k, v]) => `"${k}","${String(v ?? '').replace(/"/g, '""')}"`).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `JB-Proposal-${window._formRef}.csv`;
+  a.click();
+}
+
+// ── SUBMIT ──
+function submitForm() {
+  const decl = document.querySelector('#declChk');
+  const initials = document.getElementById('declarationInitials').value.trim();
+  const date = document.getElementById('declarationDate').value;
+
+  if (!decl.classList.contains('selected')) {
+    alert('Please confirm the declaration before submitting.');
+    return;
+  }
+  if (!initials) {
+    document.getElementById('declarationInitials').classList.add('error');
+    document.getElementById('declarationInitials').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  if (!date) {
+    document.getElementById('declarationDate').classList.add('error');
+    document.getElementById('declarationDate').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  document.querySelector('main').style.display = 'none';
+  document.querySelector('.steps-nav').style.display = 'none';
+  const ss = document.getElementById('success-screen');
+  ss.style.display = 'block';
+  document.getElementById('success-ref-display').textContent = 'Reference: ' + window._formRef;
+  document.getElementById('progressFill').style.width = '100%';
+}
+
+init();
+</script>
+</body>
+</html>
